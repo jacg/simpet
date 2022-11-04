@@ -1,5 +1,5 @@
 {
-  description = "Simulation System for Emission Tomography";
+  description = "Simplified interface to a collection of PET simulation utilities";
 
     # Version pinning is managed in flake.lock. Upgrading can be done with
     # something like
@@ -15,25 +15,26 @@
     };
   };
 
-  outputs = { self, nixpkgs, flake-utils, ... }:
+  # inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+  # inputs.flake-utils.url = "github:numtide/flake-utils";
 
-    flake-utils.lib.eachSystem ["x86_64-linux"] # "i686-linux" "aarch64-linux" "x86_64-darwin"]
+  outputs = { self, nixpkgs, flake-utils, ... }:
+    let
+      packageNames = with builtins; attrNames (readDir ./pkgs);
+      inherit (nixpkgs) lib;
+
+    in flake-utils.lib.eachSystem ["x86_64-linux"] # "i686-linux" "aarch64-linux" "x86_64-darwin"]
       (system: {
         packages =
-          let pkgs = import nixpkgs {
-                inherit system;
-                overlays = [ self.overlay ];
-              };
-          in {
-            inherit (pkgs) simset;
-          };
-
-        defaultPackage = self.packages.${system}.simset;
-
+          let
+            pkgs = import nixpkgs {
+              inherit system;
+              overlays = [ self.overlay ];
+            };
+          in lib.genAttrs packageNames (name: pkgs."${name}");
       }) // {
-        checks = self.packages;
-        overlay = final: prev: {
-          simset = final.callPackage ./simset {};
-        };
-      };
+      overlay = final: prev:
+        lib.genAttrs packageNames (name:
+          final.callPackage (./pkgs + "/${name}") {});
+    };
 }
