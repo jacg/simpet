@@ -1,45 +1,71 @@
-{ callPackage
-, lib
-, stdenv
-, fetchurl
-, nixos
-, testers
-, hello
+{ stdenv ,
+  lib,
+  fetchurl
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "hello";
-  version = "2.12.1";
+  pname = "simset";
+  version = "2.9.2";
 
   src = fetchurl {
-    url = "mirror://gnu/hello/hello-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-jZkUKv2SV28wsM18tCqNxoCZmLxdYH2Idh9RLibH2yA=";
+    url = "http://depts.washington.edu/simset/downloads/phg.${finalAttrs.version}.tar.Z";
+    sha256 = "sha256-dHie2r00qTFY1+QWuxcCqbkgT/BJp+77EKdF4y1MNMM=";
   };
 
-  doCheck = true;
+  preBuild = ''
+     # Tell makefile where it is being run
+     substituteInPlace make.files/simset.make --replace "/Users/useruser/Desktop/${finalAttrs.version}" $PWD
 
-  passthru.tests = {
-    version = testers.testVersion { package = hello; };
+     # Comment out Darwin OS_CFLAGS  TODO: make platform-dependent
+     substituteInPlace make.files/simset.make --replace "OS_CFLAGS = -DDARWIN -g" "# OS_CFLAGS = -DDARWIN -g"
 
-    invariant-under-noXlibs =
-      testers.testEqualDerivation
-        "hello must not be rebuilt when environment.noXlibs is set."
-        hello
-        (nixos { environment.noXlibs = true; }).pkgs.hello;
-  };
+     # Uncomment Linux OS_CFLAGS  TODO: make platform-dependent
+     substituteInPlace make.files/simset.make --replace "# OS_CFLAGS = -DGEN_UNIX -DLINUX" "OS_CFLAGS = -DGEN_UNIX -DLINUX"
 
-  passthru.tests.run = callPackage ./test.nix { hello = finalAttrs.finalPackage; };
+     # 64-bit support TODO: make platform-dependent
+     substituteInPlace src/LbTypes.h --replace "/* #define LB_TYPE_USE_SYS_INTS */" "#define LB_TYPE_USE_SYS_INTS"
+  '';
+  
+  buildPhase = ''
+     runHook preBuild
+    ./make_all.sh
+     #runHook postBuild
+  '';
 
-  meta = with lib; {
-    description = "A program that produces a familiar, friendly greeting";
+  installPhase = ''
+    install -d $out/bin
+    install -D bin/* $out/bin
+  '';
+
+  doCheck = false;
+
+  checkPhase = ''
+    cd samples/fastTest
+    ./runFast.sh
+    ./resultsFast.sh
+    cd -
+  '';
+
+  meta = {
+    description = "Simulation System for Emission Tomography";
     longDescription = ''
-      GNU Hello is a program that prints "Hello, world!" when you run it.
-      It is fully customizable.
+      The SimSET package uses Monte Carlo techniques to model the physical
+      processes and instrumentation used in emission imaging. First released in
+      1993, SimSET has become a primary resource for many nuclear medicine
+      imaging research groups around the world. The University of Washington
+      Imaging Research Laboratory is continuing to develop SimSET, adding new
+      functionality and utilities. The direction of development is driven partly
+      by our own requirements and partly by those of our users.
+
+      SimSET is freely available. [...] We ask that all new users
+      register, so that we can keep everyone up to date with the latest software
+      and any new developments. We also keep a database of resources for SimSET,
+      including digital phantoms and set-up files, to which users are invited to
+      contribute.
     '';
-    homepage = "https://www.gnu.org/software/hello/manual/";
-    changelog = "https://git.savannah.gnu.org/cgit/hello.git/plain/NEWS?h=v${finalAttrs.version}";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.eelco ];
-    platforms = platforms.all;
+    homepage = "https://depts.washington.edu/simset/html/simset_main.html";
+    # TODO license = ???;
+    maintainers = [ lib.maintainers.jacg ];
+    # TODO platforms = lib.platforms.???;
   };
 })
