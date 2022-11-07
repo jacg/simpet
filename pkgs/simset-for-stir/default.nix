@@ -26,6 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
      substituteInPlace make.files/simset.make --replace "/* #define LB_TYPE_USE_SYS_INTS */" "#define LB_TYPE_USE_SYS_INTS"
   '';
 
+  patches = [ ./simset-for-stir-from-git.patch ];
+
   buildPhase = ''
      runHook preBuild
     ./make_all.sh
