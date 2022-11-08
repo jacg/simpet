@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
      substituteInPlace make.files/simset.make --replace "/Users/useruser/Desktop/${finalAttrs.version}" $PWD
   '';
 
-  patches = [ ./simset-for-stir-from-git.patch ];
+  patches = [ ./simset_for_stir.patch ];
 
   buildPhase = ''
      runHook preBuild
