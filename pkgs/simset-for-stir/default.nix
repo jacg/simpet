@@ -15,15 +15,6 @@ stdenv.mkDerivation (finalAttrs: {
   preBuild = ''
      # Tell makefile where it is being run
      substituteInPlace make.files/simset.make --replace "/Users/useruser/Desktop/${finalAttrs.version}" $PWD
-
-     # Comment out Darwin OS_CFLAGS  TODO: make platform-dependent
-     substituteInPlace make.files/simset.make --replace "OS_CFLAGS = -DDARWIN -g" "# OS_CFLAGS = -DDARWIN -g"
-
-     # Uncomment Linux OS_CFLAGS  TODO: make platform-dependent
-     substituteInPlace make.files/simset.make --replace "# OS_CFLAGS = -DGEN_UNIX -DLINUX" "OS_CFLAGS = -DGEN_UNIX -DLINUX"
-
-     # 64-bit support TODO: make platform-dependent
-     substituteInPlace make.files/simset.make --replace "/* #define LB_TYPE_USE_SYS_INTS */" "#define LB_TYPE_USE_SYS_INTS"
   '';
 
   patches = [ ./simset-for-stir-from-git.patch ];
