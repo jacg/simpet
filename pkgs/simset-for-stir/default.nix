@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "simset";
+  pname = "simset-for-stir";
   version = "2.9.2";
 
   src = fetchurl {
