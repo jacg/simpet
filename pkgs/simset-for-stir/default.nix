@@ -30,7 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildPhase = ''
      runHook preBuild
-    ./make_all.sh
+     mkdir lib  # Why does the makefile not do this?
+     ./make_all.sh
      #runHook postBuild
   '';
 
