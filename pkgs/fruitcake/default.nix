@@ -16,7 +16,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mkdir -p $out/bin
     mkdir -p $out/lib
     install -D        fruitcake/bin/*      $out/bin
-    install -D -m=666 fruitcake/book/lib/* $out/lib
+    install -D -m=444 fruitcake/book/lib/* $out/lib
     install -D        format_converters/*  $out/bin
   '';
 
