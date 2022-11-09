@@ -4,10 +4,10 @@ sshpass -p simpet_dummy                                                         
         sftp -P 49166                                                                  \
              -o StrictHostKeyChecking=no                                               \
              -o UserKnownHostsFile=/dev/null                                           \
-             simpet_install@mibiolab.synology.me:SIMPET/simpet_resources/fruitcake.zip
+             simpet_install@mibiolab.synology.me:SIMPET/simpet_resources/$artefact
 
-mkdir -p $out/bin
-mkdir -p $out/lib
-unzip fruitcake.zip
-install -D        fruitcake/bin/*      $out/bin
-install -D -m=666 fruitcake/book/lib/* $out/lib
+unzip $artefact
+
+# Hack for executing sequence of commands stored in variable
+printenv installFetched > doit
+sh doit
