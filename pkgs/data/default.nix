@@ -1,7 +1,5 @@
 { stdenvNoCC ,
-  lib,
   pkgs,
-  fetchurl,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -12,7 +10,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   artefact = "Data.zip";
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
-  outputHash = "ORid7lXn2OYfALlBbGAKEOpbXT4UDa5GgbX9MksgTSQ=";
+  outputHash = "sha256-ORid7lXn2OYfALlBbGAKEOpbXT4UDa5GgbX9MksgTSQ=";
 
   installFetched = ''
     mkdir -p $out
