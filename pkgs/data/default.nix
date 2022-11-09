@@ -6,7 +6,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "simpet-data";
   version = "unknown";
 
-  builder = ../fetch-from-mibiolab-builder.sh;
+  builder = ../../fetch-from-mibiolab-builder.sh;
   artefact = "Data.zip";
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
