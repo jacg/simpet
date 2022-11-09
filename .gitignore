@@ -109,3 +109,6 @@ Data
 resources
 Results
 .vscode
+
+# nix build results
+result
