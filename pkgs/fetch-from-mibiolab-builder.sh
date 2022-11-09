@@ -8,6 +8,5 @@ sshpass -p simpet_dummy                                                         
 
 unzip $artefact
 
-# Hack for executing sequence of commands stored in variable
-printenv installFetched > doit
-sh doit
+
+sh <(printenv installFetched)
