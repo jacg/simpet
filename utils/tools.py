@@ -7,8 +7,8 @@ from utils import spm_tools as spm
 import numpy as np
 from operator import itemgetter
 from nilearn import image
-from nipype.interfaces.dcm2nii import Dcm2nii
-from nipype.interfaces import fsl
+# from nipype.interfaces.dcm2nii import Dcm2nii
+# from nipype.interfaces import fsl
 import sys
 
 def osrun(command, logfile, catch_out=False):
