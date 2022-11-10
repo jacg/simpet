@@ -51,9 +51,9 @@
               fruitcake
             ];
             # Build dependencies to be added to the shell environment
-            inputsFrom = with pkgs; [
-              data
-            ];
+            inputsFrom = with pkgs; [];
+
+            SIMPET_DATA_DIR = "${pkgs.data}/Data";
           };
         }) // {
         overlay = final: prev:
