@@ -25,8 +25,16 @@
         let
           pkgs = import nixpkgs {
             inherit system;
-            overlays = [ self.overlay ];
+            overlays = [
+              self.overlay
+            ];
           };
+          # ----- A Python interpreter with the packages that interest us -------
+          python-with-all-my-packages = (pkgs.python310.withPackages (ps: with ps; [
+            nibabel
+            nilearn
+            #nipype # depends on pybids which is broken in nixpkgs
+          ]));
         in {
           # All the packages defined by the derivations in `./pkgs`
           # Can be accessed with
@@ -49,6 +57,7 @@
               simset-for-stir
               stir-simset-input
               fruitcake
+              python-with-all-my-packages
             ];
             # Build dependencies to be added to the shell environment
             inputsFrom = with pkgs; [];
