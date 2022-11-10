@@ -1,10 +1,10 @@
 {
   description = "Simplified interface to a collection of PET simulation utilities";
 
-    # Version pinning is managed in flake.lock. Upgrading can be done with
-    # something like
-    #
-    #    nix flake lock --update-input nixpkgs
+  # Version pinning is managed in flake.lock. Upgrading can be done with
+  # something like
+  #
+  #    nix flake lock --update-input nixpkgs
 
   inputs = {
     nixpkgs     .url = "github:nixos/nixpkgs/nixos-22.05";
@@ -33,8 +33,8 @@
             };
           in lib.genAttrs packageNames (name: pkgs."${name}");
       }) // {
-      overlay = final: prev:
-        lib.genAttrs packageNames (name:
-          final.callPackage (./pkgs + "/${name}") {});
-    };
+        overlay = final: prev:
+          lib.genAttrs packageNames (name:
+            final.callPackage (./pkgs + "/${name}") {});
+      };
 }
