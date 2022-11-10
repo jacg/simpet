@@ -35,6 +35,7 @@
             nilearn
             #nipype # depends on pybids which is broken in nixpkgs
             pyyaml
+            pexpect
           ]));
         in {
           # All the packages defined by the derivations in `./pkgs`
