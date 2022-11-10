@@ -28,7 +28,33 @@
             overlays = [ self.overlay ];
           };
         in {
+          # All the packages defined by the derivations in `./pkgs`
+          # Can be accessed with
+          #
+          #   nix {shell,build,develop} <this-flake-identifier>#<package-name>
+          #
           packages = lib.genAttrs packageNames (name: pkgs."${name}");
+
+          # A shell which aggregates all the utilities provided by simpet.
+          # Can be accessed with
+          #
+          #   nix develop <this-flake-identifier>
+          #
+          # but it is also automatically activated/deactivated when
+          # entering/leaving this directory, if direnv is enabled.
+          #
+          devShell = pkgs.mkShell {
+            # Executable packages to be added to the shell environment
+            packages = with pkgs; [
+              simset-for-stir
+              stir-simset-input
+              fruitcake
+            ];
+            # Build dependencies to be added to the shell environment
+            inputsFrom = with pkgs; [
+              data
+            ];
+          };
         }) // {
         overlay = final: prev:
           lib.genAttrs packageNames (name:

@@ -112,3 +112,4 @@ Results
 
 # nix build results
 result
+/.direnv/
