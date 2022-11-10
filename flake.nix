@@ -21,15 +21,15 @@
       inherit (nixpkgs) lib;
 
     in flake-utils.lib.eachSystem ["x86_64-linux"] # "i686-linux" "aarch64-linux" "x86_64-darwin"]
-      (system: {
-        packages =
-          let
-            pkgs = import nixpkgs {
-              inherit system;
-              overlays = [ self.overlay ];
-            };
-          in lib.genAttrs packageNames (name: pkgs."${name}");
-      }) // {
+      (system:
+        let
+          pkgs = import nixpkgs {
+            inherit system;
+            overlays = [ self.overlay ];
+          };
+        in {
+          packages = lib.genAttrs packageNames (name: pkgs."${name}");
+        }) // {
         overlay = final: prev:
           lib.genAttrs packageNames (name:
             final.callPackage (./pkgs + "/${name}") {});
