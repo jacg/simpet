@@ -1,5 +1,6 @@
 import os
 from os.path import abspath, join, dirname
+from subprocess import getstatusoutput
 
 # Ablotue paths to folders with resources used
 RESOURCES = abspath(join(dirname(dirname(abspath(__file__))), 'resources'))
@@ -43,56 +44,43 @@ def get_rsc(resource, type):
            
     ### Fruitcake tools
     elif type == 'fruitcake':
-        if resource == 'overlap':
-            rpath = join(FRUTICAKE, 'overlap_fraction_stats_rois')
-        elif resource == 'overlap_array':
-            rpath = join(FRUTICAKE, 'get_overlap_stats_rois_array')
-        elif resource == 'change_format':
-            rpath = join(FRUTICAKE, 'cambia_formato_hdr')
-        elif resource == 'change_values':
-            rpath = join(FRUTICAKE, 'cambia_valores_ima_hdr')
-        elif resource == 'change_values_array':
-            rpath = join(FRUTICAKE, 'change_values_array')
-        elif resource == 'change_interval':
-            rpath = join(FRUTICAKE, 'cambia_valores_de_un_intervalo')
-        elif resource == 'operate_image':
-            rpath = join(FRUTICAKE, 'opera_imagen_hdr')
-        elif resource == 'compute_roi_hemis_vol':
-            rpath = join(FRUTICAKE, 'compute_roi_hemis_volume')
-        elif resource == 'change_img_matrix':
-            rpath = join(FRUTICAKE, 'cambia_matriz_imagen_hdr')
-        elif resource == 'erase_negs':
-            rpath = join(FRUTICAKE, 'elimina_valores_negativos_hdr')
-        elif resource == 'erase_nans':
-            rpath = join(FRUTICAKE, 'elimina_valores_nan_hdr')
-        elif resource == 'histo_image':
-            rpath = join(FRUTICAKE, 'histograma_ima_hdr')
-        elif resource == 'rois_vols':
-            rpath = join(FRUTICAKE, 'compute_roi_vol_array')
-        elif resource == 'calc_vm_voi':
-            rpath = join(FRUTICAKE, 'calcula_vm_en_roi')
-        elif resource == 'calc_vmax_voi':
-            rpath = join(FRUTICAKE, 'calcula_vmax_en_roi')
-        elif resource == 'clustering_spm':
-            rpath = join(FRUTICAKE, 'generate_SPM_maps')
-        elif resource == 'clustering_spm':
-            rpath = join(FRUTICAKE, 'generate_SPM_maps')
-        elif resource == 'conv_sino2proy':
-            rpath = join(FRUTICAKE, 'conv_sino2proy')
-        elif resource == 'conv_proy2sino':
-            rpath = join(FRUTICAKE, 'conv_proy2sino')
-        elif resource == 'gen_hdr':
-            rpath = join(FRUTICAKE, 'gen_hdr')
-        elif resource == 'convolucion_hdr':
-            rpath = join(FRUTICAKE, 'convolucion_hdr')
-        elif resource == 'corta_pega_filcol_hdr':
-            rpath = join(FRUTICAKE, 'corta_pega_filcol_hdr')
-            
-        else:
-            rpath = False
+        executable_name = {
+            'overlap'               : 'overlap_fraction_stats_rois',
+            'overlap_array'         : 'get_overlap_stats_rois_array',
+            'change_format'         : 'cambia_formato_hdr',
+            'change_values'         : 'cambia_valores_ima_hdr',
+            'change_values_array'   : 'change_values_array',
+            'change_interval'       : 'cambia_valores_de_un_intervalo',
+            'operate_image'         : 'opera_imagen_hdr',
+            'compute_roi_hemis_vol' : 'compute_roi_hemis_volume',
+            'change_img_matrix'     : 'cambia_matriz_imagen_hdr',
+            'erase_negs'            : 'elimina_valores_negativos_hdr',
+            'erase_nans'            : 'elimina_valores_nan_hdr',
+            'histo_image'           : 'histograma_ima_hdr',
+            'rois_vols'             : 'compute_roi_vol_array',
+            'calc_vm_voi'           : 'calcula_vm_en_roi',
+            'calc_vmax_voi'         : 'calcula_vmax_en_roi',
+            'clustering_spm'        : 'generate_SPM_maps',
+            'conv_sino2proy'        : 'conv_sino2proy',
+            'conv_proy2sino'        : 'conv_proy2sino',
+            'gen_hdr'               : 'gen_hdr',
+            'convolucion_hdr'       : 'convolucion_hdr',
+            'corta_pega_filcol_hdr' : 'corta_pega_filcol_hdr',
+        }[resource]
+
+        status, path = getstatusoutput(f'which {executable_name}')
+        if status:
+            raise SimPETExcetpion(f'Failed to find fruitcake resource: {resource}')
+        print(f'FOUND: {resource:23} -> {path}')
+        return path
 
     if os.path.exists(str(rpath)):
         return rpath
     else:
         message = "Error: Resource " + str(resource) + ' of type ' + str(type) + ' not found!'
         raise TypeError(message)
+
+
+# TODO: move to a more sensible place
+class SimPETExcetpion(Exception):
+    pass
