@@ -65,6 +65,11 @@
             inputsFrom = with pkgs; [];
 
             SIMPET_DATA_DIR = "${pkgs.data}/Data";
+
+            # Isn't there a higher-level way of adding stuff to LD_LIBRARY_PATH?
+            shellHook = ''
+              export LD_LIBRARY_PATH=${pkgs.fruitcake}/lib:$LD_LIBRARY_PATH
+            '';
           };
         }) // {
         overlay = final: prev:
