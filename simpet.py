@@ -36,10 +36,11 @@ class SimPET(object):
         with open(config_file, 'rb') as f:
             self.config = yaml.load(f.read(), Loader=yaml.FullLoader)
 
-
-        self.dir_data =  self.config.get("dir_data_path")
-        if not self.dir_data:
-            self.dir_data = join(self.simpet_dir, "Data")
+        # self.dir_data =  self.config.get("dir_data_path")
+        # if not self.dir_data:
+        #     self.dir_data = join(self.simpet_dir, "Data")
+        # NOTE: unconditionally override self.dir_data while porting to flake
+        self.dir_data = os.getenv('SIMPET_DATA_DIR')
 
         self.dir_results =  self.config.get("dir_results_path")
         if not self.dir_results:
