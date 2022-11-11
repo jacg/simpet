@@ -109,7 +109,7 @@ class SimSET_Simulation(object):
         my_phg = self.prepare_simset_files(sim_dir, act_table_factor, act, sim_photons, sim_time, 0)
         my_log = join(sim_dir,"simset_s0.log")
 
-        command = "%s/bin/phg %s > %s" % (self.simset_dir, my_phg, my_log)
+        command = f'phg {my_phg} > {my_log}'
         tools.osrun(command, log_file)
 
         rec_weight = join(sim_dir,"rec.weight")
