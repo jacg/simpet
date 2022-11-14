@@ -182,6 +182,7 @@ def verify_simset_install(simset_dir):
 
 
 def install_stir(stir_dir, simset_dir, log_file):
+    logging.info('Bulding STIR')
     build_dir = join(stir_dir, 'build')
     install_dir = join(stir_dir, 'install')
 
