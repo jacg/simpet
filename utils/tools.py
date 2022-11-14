@@ -11,6 +11,7 @@ from nipype.interfaces.dcm2nii import Dcm2nii
 from nipype.interfaces import fsl
 import sys
 
+from utils import rsystem
 
 def osrun(command, logfile, catch_out=False):
     """
@@ -19,21 +20,7 @@ def osrun(command, logfile, catch_out=False):
     :param logger: logger file
     :return:
     """
-    if catch_out:
-        status, out = getoutput(command)
-        if status != 0:
-            log_message(logfile, command, 'error')
-            raise TypeError(command)
-        else:
-            log_message(logfile, command)
-        return out
-    else:
-        if os.system(command) != 0:
-
-            log_message(logfile, command, 'error')
-            raise TypeError(command)
-        else:
-            log_message(logfile, command)
+    rsystem(command, capture=catch_out)
 
 def nib_load(image, logfile=False):
     """
