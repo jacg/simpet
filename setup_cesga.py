@@ -6,6 +6,7 @@ import os
 from os.path import join, basename, exists
 import shutil
 from multiprocessing import cpu_count
+import logging
 
 simpet_dir = os.getcwd()
 
@@ -39,7 +40,7 @@ def install_simset(simset_dir, log_file):
     os.makedirs(simset_dir)
 
     # Download, patch and compile SimSET
-    print('Downloading SimSET source from Washington University repos...')
+    logging.info('Downloading SimSET source from Washington University repos...')
     icom = 'wget -q http://depts.washington.edu/simset/downloads/phg.2.9.2.tar.Z > %s' % log_file
     rsystem(icom)
     icom = 'tar -xvf %s/phg.2.9.2.tar.Z --directory=SimSET > %s' % (dest_dir,log_file)
@@ -49,7 +50,7 @@ def install_simset(simset_dir, log_file):
     os.chdir(simset_dir)
 
     #Let's Apply the SimSET patch for SimPET
-    print('Applying modification patch for SimSET-STIR interface...')
+    logging.info('Applying modification patch for SimSET-STIR interface...')
     icom = 'patch -s -p0 < %s/src/simset/simset_for_stir.patch' % simpet_dir
     rsystem(icom)
 
@@ -72,7 +73,7 @@ def install_simset(simset_dir, log_file):
     #Now we can compile
     os.chdir(join(simset_dir,'2.9.2'))
     os.makedirs('lib')
-    print('Compiling SimSET...')
+    logging.info('Compiling SimSET...')
     icom = './make_all.sh'
     rsystem(icom)
 
@@ -109,7 +110,7 @@ def install_stir(stir_dir, simset_dir, log_file):
     os.makedirs(build_dir)
     os.makedirs(install_dir)
     os.chdir(stir_dir)
-    print("Cloning the SimSET input branch from STIR repo...")
+    logging.info("Cloning the SimSET input branch from STIR repo...")
     icom = 'git clone --single-branch --branch simset_input https://github.com/txusser/STIR.git'
     rsystem(icom)
 
@@ -143,7 +144,7 @@ def install_stir(stir_dir, simset_dir, log_file):
     shutil.move(newmakefile,makefile)
     rsystem('cmake ../STIR/')
 
-    print('Building STIR....')
+    logging.info('Building STIR....')
     icom = 'make -s -j%s & make install' % str(cpu_count())
     rsystem(icom)
 
