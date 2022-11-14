@@ -6,7 +6,7 @@ import os
 from os.path import join, basename, exists
 import shutil
 from multiprocessing import cpu_count
-from subprocess import getstatusoutput
+import subprocess
 
 import logging
 import sys
@@ -27,7 +27,7 @@ root.addHandler(handler)
 
 
 
-def rsystem(command):
+def rsystem(command, capture=True):
     """
     Executes command, raise an error if it fails and send status to logfile
     :param command: (string) command to be executed
@@ -35,10 +35,11 @@ def rsystem(command):
     """
 
     logging.info(f'EXECUTING: {command}')
-    status, output = getstatusoutput(command)
+    if capture: res = subprocess.run(command, shell=True, capture_output=True)
+    else      : res = subprocess.run(command, shell=True, stderr=subprocess.STDOUT)
 
-    if status:
-        logging.error(f'Failed with output:\n{output}')
+    if res.returncode:
+        logging.error(f'Failed with output:\n{res.stdout}')
         raise SystemExit(1)
     else:
         logging.info(f'COMPLETED: {command}')
