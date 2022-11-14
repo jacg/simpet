@@ -6,6 +6,25 @@ import os
 from os.path import join, basename, exists
 import shutil
 from multiprocessing import cpu_count
+from subprocess import getstatusoutput
+
+import logging
+import sys
+
+logging.basicConfig(filename='setup.log', encoding='utf-8', level=logging.DEBUG)
+
+root    = logging.getLogger()
+handler = logging.StreamHandler(sys.stdout)
+
+root   .setLevel(logging.DEBUG)
+handler.setLevel(logging.DEBUG)
+
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+handler.setFormatter(formatter)
+
+root.addHandler(handler)
+
+
 
 
 def rsystem(command):
@@ -15,18 +34,15 @@ def rsystem(command):
     :return:
     """
 
-    message = "\nEXE: %s" % command
-    print(message)
+    logging.info(f'EXECUTING: {command}')
+    status, output = getstatusoutput(command)
 
-    if os.system(command) != 0:
-        message = "ERROR executing: %s " % command
-        with open(log_file, 'a') as w_file:
-            w_file.write(message)
-        raise TypeError(command)
+    if status:
+        logging.error(f'Failed with output:\n{output}')
+        raise SystemExit(1)
     else:
-        print("OK executing: %s" % command)
-        with open(log_file, 'a') as w_file:
-            w_file.write(message)
+        logging.info(f'COMPLETED: {command}')
+
 
 
 def install_soap():
