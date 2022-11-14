@@ -11,6 +11,7 @@ from nilearn import image
 # from nipype.interfaces import fsl
 import sys
 
+
 def osrun(command, logfile, catch_out=False):
     """
     Executes command, raise an error if it fails and send status to logger
@@ -26,7 +27,6 @@ def osrun(command, logfile, catch_out=False):
         else:
             log_message(logfile, command)
         return out
-
     else:
         if os.system(command) != 0:
 
