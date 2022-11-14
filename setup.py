@@ -36,6 +36,8 @@ def install_soap():
     """
     # Install SOAP
 
+    print("Not installing SOAP (???): that's Nix' job"); return
+
     icom = 'sudo apt install python3 -y -q'
     rsystem(icom)
 
@@ -102,6 +104,9 @@ def install_soap():
 
 
 def install_simset(simset_dir, log_file):
+
+    print("Not installing SimSET: that's Nix' job"); return
+
     if exists(simset_dir):
         shutil.rmtree(simset_dir)
     os.makedirs(simset_dir)
@@ -165,6 +170,8 @@ def verify_simset_install(simset_dir):
 
 
 def install_stir(stir_dir, simset_dir, log_file):
+    print("Not installing STIR: that's Nix' job"); return
+
     build_dir = join(stir_dir, 'build')
     install_dir = join(stir_dir, 'install')
 
@@ -230,6 +237,8 @@ def verify_stir_install(stir_dir):
 
 
 def download_resources(dest_dir):
+    print("Not downloading resources: that's Nix' job"); return
+
     print('Downloading resources from Onedrive...')
     icom = 'sshpass -p simpet_dummy sftp -P 49166 simpet_install@mibiolab.synology.me:SIMPET/simpet_resources/Data.zip'
     rsystem(icom)
@@ -269,6 +278,8 @@ def update_config(stir_dir, simset_dir, dest_dir):
     f_new.close()
 
     shutil.move(newconfigfile, configfile)
+
+    print("Skipping messing around with env which is already done by flake"); return
 
     pathfile = 'simpet_paths.sh'
     f_paths = open(pathfile, 'w')
