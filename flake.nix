@@ -65,6 +65,7 @@
             inputsFrom = with pkgs; [];
 
             SIMPET_DATA_DIR = "${pkgs.data}/Data";
+            PHG_DATA_DIR = "${pkgs.simset-for-stir}/phg.data";
 
             # Isn't there a higher-level way of adding stuff to LD_LIBRARY_PATH?
             shellHook = ''

@@ -35,6 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     install -d $out/bin
     install -D bin/* $out/bin
+    cp -r phg.data $out
   '';
 
   doCheck = false;
