@@ -89,8 +89,7 @@ def make_simset_phg(config, output_file, simulation_dir, act,
     min_z_target = -scanner_axial_fov/2
 
     # Directory variables
-    simset_dir = config.get("dir_simset")
-    simset_phgdata_dir = join(simset_dir,"phg.data")
+    simset_phgdata_dir = os.getenv('PHG_DATA_DIR')
 
     # Now we write the phg file
     with open (output_file, 'w') as f:
@@ -351,7 +350,7 @@ def make_index_file(simulation_dir, simset_dir, log_file=False):
     phg_file = join(simulation_dir, "phg.rec")
     act_dat = join(simulation_dir, "act.dat")
     att_dat = join(simulation_dir, "att.dat")
-    make_index_file = join(simset_dir,"bin", "makeindexfile")
+    make_index_file = "makeindexfile"
 
     prompts = (phg_file + "\n" + "y\n" + "y\n" + "0\n" + "y\n" + act_dat + "\n" +
                "0\n" + "0\n" + "1\n" + "n\n" + "n\n" + "y\n" + "y\n" + "0\n" + "y\n" +
@@ -432,7 +431,7 @@ def add_randoms(sim_dir, simset_dir, coincidence_window, rebin=True, log_file=Fa
 
     f.close()
 
-    sorting_bin = join(simset_dir, "bin", "timesort -d")
+    sorting_bin = "timesort -d"
 
     command = command = "%s %s >> %s" % (sorting_bin, template, log_file)
     tools.osrun(command, log_file)
@@ -449,7 +448,7 @@ def add_randoms(sim_dir, simset_dir, coincidence_window, rebin=True, log_file=Fa
 
     f.close()
 
-    addrand_bin = join(simset_dir, "bin", "addrandoms")
+    addrand_bin = "addrandoms"
 
     command = "%s %s >> %s" % (addrand_bin, template, log_file)
     tools.osrun(command, log_file)
@@ -471,14 +470,14 @@ def add_randoms(sim_dir, simset_dir, coincidence_window, rebin=True, log_file=Fa
                 f.write(line)
 
         binfile = join(sim_dir, "phg.rec")
-        phgbin = join(simset_dir, "bin", "bin -d")
+        phgbin = "bin -d"
 
         command = command = "%s %s >> %s" % (phgbin, binfile, log_file)
         tools.osrun(command, log_file)
 
 def combine_history_files(simset_dir, history_files, output, log_file):
 
-    combinehist = join(simset_dir, "bin", "combinehist")
+    combinehist = "combinehist"
 
     rcommand = '%s %s %s' % (combinehist, history_files, output)
 
@@ -488,7 +487,7 @@ def combine_history_files(simset_dir, history_files, output, log_file):
 
 def simset_calcattenuation(simset_dir,sim_dir,output,hdr_to_copy,nrays=1,timeout=36000):
 
-    calcattenuation = join(simset_dir, "bin", "calcattenuation")
+    calcattenuation = "calcattenuation"
 
     current_dir = os.getcwd()
     os.chdir(sim_dir)
