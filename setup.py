@@ -11,6 +11,8 @@ import subprocess
 import logging
 import sys
 
+from utils import rsystem
+
 logging.basicConfig(filename='setup.log', encoding='utf-8', level=logging.DEBUG)
 
 root    = logging.getLogger()
@@ -23,27 +25,6 @@ formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(messag
 handler.setFormatter(formatter)
 
 root.addHandler(handler)
-
-
-
-
-def rsystem(command, capture=True):
-    """
-    Executes command, raise an error if it fails and send status to logfile
-    :param command: (string) command to be executed
-    :return:
-    """
-
-    logging.info(f'EXECUTING: {command}')
-    if capture: res = subprocess.run(command, shell=True, capture_output=True)
-    else      : res = subprocess.run(command, shell=True, stderr=subprocess.STDOUT)
-
-    if res.returncode:
-        logging.error(f'Failed with output:\n{res.stdout}')
-        raise SystemExit(1)
-    else:
-        logging.info(f'COMPLETED: {command}')
-
 
 
 def install_soap():
