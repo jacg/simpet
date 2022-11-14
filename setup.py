@@ -354,8 +354,10 @@ print("This can take a bit, maybe 15 min... you may abort it if you are very sur
 icom = ('source simpet_paths.sh')
 import simpet
 
-test = simpet.SimPET('Data/test_image/testParams.yml')
-test.run()
+
+DATA = os.getenv('SIMPET_DATA_DIR')
+
+simpet.SimPET(f'{DATA}/test_image/testParams.yml').run()
 
 verify_simset_install(simset_dir)
 verify_stir_install(stir_dir)
