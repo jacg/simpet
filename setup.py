@@ -27,80 +27,6 @@ handler.setFormatter(formatter)
 root.addHandler(handler)
 
 
-def install_soap():
-    """
-    Execute installation of all dependencies
-    :return:
-    """
-    # Install SOAP
-
-    print("Not installing SOAP (???): that's Nix' job"); return
-
-    icom = 'sudo apt install python3 -y -q'
-    rsystem(icom)
-
-    icom = 'sudo apt install unzip -y -q'
-    rsystem(icom)
-
-    icom = 'sudo apt install sshpass -y -q'
-    rsystem(icom)
-
-    icom = 'sudo apt install python3-pip -y -q'
-    rsystem(icom)
-
-    icom = 'sudo apt install ipython3 -y -q'
-    rsystem(icom)
-
-    icom = 'sudo apt install libboost-dev libboost-all-dev -y -q'
-    rsystem(icom)
-
-    icom = 'sudo apt install libpcre3 libpcre3-dev -y -q'
-    rsystem(icom)
-
-    icom = 'sudo apt install libncurses-dev -y -q'
-    rsystem(icom)
-
-    # Install and upgrade PIP
-    icom = 'sudo pip3 install -U PyYAML'
-    rsystem(icom)
-
-    # Install numpy
-    icom = 'sudo apt install python3-numpy -y -q'
-    rsystem(icom)
-
-    # Install Scipy
-    icom = 'sudo apt install python3-scipy -y -q'
-    rsystem(icom)
-
-    # Install Nibabel
-    icom = 'sudo apt install python3-nibabel -y -q'
-    rsystem(icom)
-
-    # Install matplotlib
-    icom = 'sudo apt install python3-matplotlib -y -q'
-    rsystem(icom)
-
-    # Install Pandas
-    icom = 'sudo apt install python3-pandas -y -q'
-    rsystem(icom)
-
-    # Install nilearn
-    icom = 'sudo pip3 install -U nilearn'
-    rsystem(icom)
-
-    # Install cmake (needed for STIR)
-    icom = 'sudo apt install cmake -y -q'
-    rsystem(icom)
-
-    # Install swig (needed for STIR)
-    icom = 'sudo apt install swig -y -q'
-    rsystem(icom)
-
-    # Install NIPYPE
-    icom = 'sudo pip3 install nipype'
-    rsystem(icom)
-
-
 def install_simset(simset_dir, log_file):
 
     print("Not installing SimSET: that's Nix' job"); return
@@ -329,7 +255,7 @@ log_file = join(simpet_dir, 'log_setup.txt')
 if exists(log_file):
     os.remove(log_file)
 
-install_soap()
+
 
 dest_dir = join(simpet_dir, 'include')
 if not exists(dest_dir):
