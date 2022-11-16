@@ -31,6 +31,7 @@
           };
           # ----- A Python interpreter with the packages that interest us -------
           python-with-all-my-packages = (pkgs.python310.withPackages (ps: with ps; [
+            ipython
             nibabel
             nilearn
             #nipype # depends on pybids which is broken in nixpkgs
